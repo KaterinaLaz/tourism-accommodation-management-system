@@ -1,0 +1,29 @@
+ion-datetime{
+  display: flex;
+  width: fit-content;
+  height:90%;
+  padding: 10px;
+  border-radius: 50px;
+  border: 1px solid #cccccc00;
+  font-size: 16px;
+  background-color: rgb(221, 230, 235);
+
+}
+.alert-checkbox-label.sc-ion-alert-md{
+  color:rgb(3, 3, 3);
+}
+.datetime-size-fixed:not(.datetime-prefer-wheel)
+{
+  max-width: 600px;
+}
+.alert-radio-label {
+  color: black; /* Or another visible color */
+}
+.custom-alert .alert-radio-label {
+  color: black !important; /* Ensure that the text color is always black */
+  font-size: 16px; /* Adjust the size to make it clearer */
+}
+
+
+
+
