@@ -1,7 +1,7 @@
 import { doc, getDoc } from "firebase/firestore";
 import { dataFire } from './FirebaseConfig';
 import React, { useState } from 'react';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonInput, IonButton, IonContent, IonItem, IonLabel, IonToast, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonButtons, IonIcon } from '@ionic/react';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonInput, IonButton, IonContent, IonItem, IonLabel, IonToast, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonButtons, IonIcon, IonImg } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBackOutline } from 'ionicons/icons'; // Back arrow icon
 
@@ -73,11 +73,13 @@ const Gestpage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
 
-      <IonContent className="ion-padding">
+      <IonContent color={'light'} className="ion-padding">
         <IonGrid fixed>
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
-              <IonCard color="light">
+            <IonImg src='src\pages\logo-1.png'>
+            </IonImg>
+              <IonCard color={'dark'}>
                 <IonCardContent>
                   <IonItem color={'dark'}>
                     <IonLabel position="stacked">Enter Event ID</IonLabel>
