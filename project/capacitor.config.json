@@ -1,0 +1,11 @@
+{
+  "appId": "househiro.app",
+  "appName": "PROJECT",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}

@@ -1,0 +1,15 @@
+ion-modal#modal-details {
+    --height: 80%;
+    --border-radius: 16px   
+    
+}
+ion-title#title{
+    color: black;
+    text-align: center;
+    text-shadow: 20%;
+}
+ion-fab {
+    position: fixed;
+    right: 10px;  
+    bottom: 10px; 
+}
