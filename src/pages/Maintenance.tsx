@@ -7,6 +7,7 @@ import { addDoc, collection, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { dataFire } from './FirebaseConfig';
 import './Maintenance.css'
+import { text } from 'ionicons/icons';
 
 const Maintenance: React.FC = () => {
     const [problemDescription, setProblemDescription] = useState<string>(''); 
@@ -14,6 +15,31 @@ const Maintenance: React.FC = () => {
     const [location, setLocation] = useState<string>(''); 
     const [maintainers, setMaintainers] = useState<any[]>([]); 
   
+    const sendEmailNotification = async (email: string, subject: string, text: string) => {
+      try {
+        const response = await fetch('https://your-cloud-function-url/sendEmailNotification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: email,
+            subject: 'Maintenance Request',
+            text: `You have a new maintenance request at ${location}: ${problemDescription}`,
+          }),
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to send email');
+        }
+    
+        const result = await response.json();
+        console.log('Email sent:', result);
+      } catch (error) {
+        console.error('Error sending email:', error);
+        alert('Error sending email notification');
+      }
+    };
     useEffect(() => {
       const fetchMaintainers = async () => {
         const querySnapshot = await getDocs(collection(dataFire, 'maintenance')); 
@@ -29,21 +55,39 @@ const Maintenance: React.FC = () => {
     }, []);
 
     const handleSubmit = async () => {
-      if (!problemDescription || !selectedMaintainer || !location ) {
+      if (!problemDescription || !selectedMaintainer || !location) {
         alert('Please fill in all fields');
         return;
       }
-  
+    
       try {
-        await addDoc(collection(dataFire, 'maintenance'), {
+        // Fetch selected maintainer's email from Firestore
+        const maintainerDoc = maintainers.find((maintainer) => maintainer.id === selectedMaintainer);
+    
+        if (!maintainerDoc) {
+          alert('Maintainer not found');
+          return;
+        }
+    
+        const maintainerEmail = maintainerDoc.Email;  // Assuming Firestore document contains 'Email' field
+    
+        // Add the maintenance report to Firestore
+        await addDoc(collection(dataFire, 'maintenanceReports'), {
           problemDescription,
           selectedMaintainer,
           location,
           createdAt: new Date(),
         });
-  
-        alert('Request registered successfully!');
-        
+    
+        // Define a fixed subject for the email
+        const subject = 'New Maintenance Request';
+    
+        // Call Firebase Cloud Function to send email
+        await sendEmailNotification(maintainerEmail, subject, `There is a new maintenance request at ${location}. Description: ${problemDescription}`);
+    
+        alert('Request registered successfully, and email sent!');
+    
+        // Reset form
         setProblemDescription('');
         setSelectedMaintainer('');
         setLocation('');
@@ -52,6 +96,8 @@ const Maintenance: React.FC = () => {
         alert(error);
       }
     };
+    
+    
 
   return (
     <IonPage>
@@ -105,3 +151,7 @@ const Maintenance: React.FC = () => {
 };
 
 export default Maintenance;
+function sendEmailNotification(maintainerEmail: any, subject: any, text: any) {
+  throw new Error('Function not implemented.');
+}
+

@@ -263,7 +263,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        <IonContent color={'light'} className="ion-padding">
+        <IonContent color={'dark'} className="ion-padding">
           <div style={{ height: '700', color: 'darkblue' }}>
             <Calendar
               
