@@ -90,15 +90,15 @@ const Login: React.FC = () => {
             </IonHeader>
             <IonContent  color={'light'} className="ion-padding" >
                 <IonGrid fixed >
+                    
+
                     <IonRow class="ion-justify-content-center">
+                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
+                        
                         <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
                             <IonImg src='src\pages\logo-1.png'>
                             </IonImg>
                         </IonCol>
-                    </IonRow>
-
-                    <IonRow class="ion-justify-content-center">
-                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
                             <IonCard   color={'dark'}>
                                 <IonCardContent  >
                                     <IonInput 

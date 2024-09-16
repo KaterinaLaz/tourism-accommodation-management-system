@@ -77,12 +77,6 @@ const Gestpage: React.FC = () => {
         <IonGrid fixed>
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
-            <IonRow class="ion-justify-content-center">
-                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
-                            <IonImg src='src\pages\logo-1.png'>
-                            </IonImg>
-                        </IonCol>
-                    </IonRow>
               <IonCard color="light">
                 <IonCardContent>
                   <IonItem color={'dark'}>
