@@ -1,57 +1,74 @@
-// AddMaintainerModal.tsx
-// ListMaintenance.tsx
-// DeleteConfirmationAlert.tsx
-
 import { IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { dataFire } from './FirebaseConfig';
-import './Maintenance.css'
+import { useAuth } from '../components/AuthContext'; // Import the useAuth hook
+import './Maintenance.css';
+
+// Define the User type with the expected fields
+interface User {
+  id: string;
+  fullname: string;
+  email: string;
+  role: string;
+}
 
 const Maintenance: React.FC = () => {
-    const [problemDescription, setProblemDescription] = useState<string>(''); 
-    const [selectedMaintainer, setSelectedMaintainer] = useState<string>(''); 
-    const [location, setLocation] = useState<string>(''); 
-    const [maintainers, setMaintainers] = useState<any[]>([]); 
-  
-    useEffect(() => {
-      const fetchMaintainers = async () => {
-        const querySnapshot = await getDocs(collection(dataFire, 'maintenance')); 
-        const maintainersList = querySnapshot.docs.map((doc: { id: any; data: () => any; }) => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-       
-        setMaintainers(maintainersList); 
-      };
-  
-      fetchMaintainers();
-    }, []);
+  const { role } = useAuth(); // Get the role from Auth context
+  const [problemDescription, setProblemDescription] = useState<string>(''); 
+  const [selectedMaintainer, setSelectedMaintainer] = useState<string>(''); 
+  const [location, setLocation] = useState<string>(''); 
+  const [maintainers, setMaintainers] = useState<User[]>([]); // Use the User type for maintainers
 
-    const handleSubmit = async () => {
-      if (!problemDescription || !selectedMaintainer || !location ) {
-        alert('Please fill in all fields');
-        return;
-      }
-  
+  // Fetch only users with the "Maintenance" role from the "users" collection
+  useEffect(() => {
+    const fetchMaintainers = async () => {
       try {
-        await addDoc(collection(dataFire, 'maintenance'), {
-          problemDescription,
-          selectedMaintainer,
-          location,
-          createdAt: new Date(),
-        });
-  
-        alert('Request registered successfully!');
-        
-        setProblemDescription('');
-        setSelectedMaintainer('');
-        setLocation('');
+        // Query to get only the users with the role "Maintenance"
+        const q = query(collection(dataFire, 'users'), where('role', '==', 'Maintenance'));
+        const querySnapshot = await getDocs(q); // Fetch users with role "Maintenance"
+        const maintainersList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          fullname: doc.data().fullname, // Ensure that fullname exists
+          email: doc.data().email,
+          role: doc.data().role
+        }));
+      
+        setMaintainers(maintainersList); // Set the maintainers in state
       } catch (error) {
-        console.error('Error adding document: ', error);
-        alert(error);
+        console.error('Error fetching maintainers:', error);
       }
     };
+
+    fetchMaintainers();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!problemDescription || !selectedMaintainer || !location) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    try {
+      // Store the report in the 'maintenanceReports' collection
+      await addDoc(collection(dataFire, 'maintenanceReports'), {
+        problemDescription,
+        selectedMaintainer,
+        location,
+        createdAt: new Date(),
+      });
+
+      alert('Request registered successfully!');
+      
+      // Clear form fields
+      setProblemDescription('');
+      setSelectedMaintainer('');
+      setLocation('');
+    } catch (error) {
+      console.error('Error adding document: ', error);
+      alert(error);
+    }
+  };
 
   return (
     <IonPage>
@@ -61,43 +78,41 @@ const Maintenance: React.FC = () => {
             <IonMenuButton></IonMenuButton>
           </IonButtons>
           <IonTitle>Damage Report</IonTitle>
-          <IonButton color={'dark'} fill="clear" slot='end' routerLink="/app/list-maintenance">
-            All the maintainers
-           </IonButton>
+          
         </IonToolbar>
       </IonHeader>
       <IonContent color={'light'} className='ion-padding'>
         <IonItem color={'dark'}>
-            <IonTextarea
+          <IonTextarea
             value={problemDescription}
             placeholder="Damage"
             autoGrow={true}
             onIonChange={(e) => setProblemDescription(e.detail.value!)}
-            ></IonTextarea>
+          ></IonTextarea>
         </IonItem>
         <IonItem color={'dark'}>
-            <IonInput 
+          <IonInput 
             value={location}
             placeholder="Where"
             onIonChange={(e) => setLocation(e.detail.value!)}
-            />
+          />
         </IonItem>
         <IonItem color={'dark'}>
-            <IonSelect
+          <IonSelect
             value={selectedMaintainer} 
             placeholder="Select maintainer"
             onIonChange={(e) => setSelectedMaintainer(e.detail.value)}
             className="custom-select"
-            >
-                {maintainers.map((maintainer) => (
+          >
+            {maintainers.map((maintainer) => (
               <IonSelectOption key={maintainer.id} value={maintainer.id}>
-                {maintainer.Name} 
+                {maintainer.fullname} 
               </IonSelectOption>
             ))}
-            </IonSelect>
+          </IonSelect>
         </IonItem>
         <IonButton color={'primary'} expand="block" onClick={handleSubmit} >
-            Inform 
+          Inform 
         </IonButton>
       </IonContent>
     </IonPage>

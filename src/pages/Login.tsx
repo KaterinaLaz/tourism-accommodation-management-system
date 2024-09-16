@@ -48,30 +48,34 @@ const Login: React.FC = () => {
         setLoading(true); // Start loading
     
         signInWithEmailAndPassword(auth, Email, password)
-          .then(async (userCredential) => {
-            const UserID = userCredential.user.uid;
-            const userDocRef = doc(dataFire, 'users', UserID);
-            const userDoc = await getDoc(userDocRef);
+            .then(async (userCredential) => {
+                const UserID = userCredential.user.uid;
+                const userDocRef = doc(dataFire, 'users', UserID);
+                const userDoc = await getDoc(userDocRef);
     
-            if (userDoc.exists()) {
-              const role = userDoc.data().role as string;
+                if (userDoc.exists()) {
+                    const role = userDoc.data().role as string;
     
-              // Use the login function from AuthContext to set isAuthenticated and role
-              login(role);
+                    login(role);
     
-              // Redirect to the main app page; PrivateRoute will handle role-based access
-              history.push('/app');
-            } else {
-              setErrorMessage('User does not exist');
-            }
-          })
-          .catch((error) => {
-            setErrorMessage(error.message);
-          })
-          .finally(() => {
-            setLoading(false); // Stop loading
-          });
-      }
+                    if (role === 'Maintenance') {
+                        history.push('/app/my-job');
+                    } else {
+                        // Redirect to the main app page; PrivateRoute will handle role-based access
+                        history.push('/app');
+                    }
+                } else {
+                    setErrorMessage('User does not exist');
+                }
+            })
+            .catch((error) => {
+                setErrorMessage(error.message);
+            })
+            .finally(() => {
+                setLoading(false); // Stop loading
+            });
+    }
+    
         
     
 
@@ -88,7 +92,7 @@ const Login: React.FC = () => {
                 <IonGrid fixed >
                     <IonRow class="ion-justify-content-center">
                         <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
-                            <IonImg src='src\pages\logo.png'>
+                            <IonImg src='src\pages\logo-1.png'>
                             </IonImg>
                         </IonCol>
                     </IonRow>

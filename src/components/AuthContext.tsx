@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
 // Define the types for the context
 interface AuthContextProps {
   isAuthenticated: boolean;
   role: string | null; // Add role to the context
+  user: User | null; // Add user to the context
   login: (role: string) => void; // Accept role when logging in
   logout: () => void;
 }
@@ -21,6 +23,26 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return localStorage.getItem('role'); // Set initial role from localStorage
   });
 
+  const [user, setUser] = useState<User | null>(null); // State to store the current user
+
+  // Listen for Firebase auth state changes
+  useEffect(() => {
+    const auth = getAuth();
+    
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser); // Set the current user if authenticated
+        setIsAuthenticated(true);
+        // Optionally, fetch the user's role from Firestore or another source if needed
+      } else {
+        setUser(null); // Clear the user if not authenticated
+        setIsAuthenticated(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   // Simulated login function that sets both authentication and role
   const login = (role: string) => {
     setIsAuthenticated(true);
@@ -31,21 +53,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   
   // Logout function clears authentication and role
   const logout = () => {
-    setIsAuthenticated(false);
-    setRole(null); // Clear the role when the user logs out
-    localStorage.removeItem('isAuthenticated');  // Clear authentication status
-    localStorage.removeItem('role'); // Clear role from localStorage
-    console.log('Logged out');
+    const auth = getAuth();
+    auth.signOut().then(() => {
+      setIsAuthenticated(false);
+      setRole(null); // Clear the role when the user logs out
+      setUser(null); // Clear the user when logged out
+      localStorage.removeItem('isAuthenticated');  // Clear authentication status
+      localStorage.removeItem('role'); // Clear role from localStorage
+      console.log('Logged out');
+    });
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, role, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, role, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// hook to use the AuthContext
+// Hook to use the AuthContext
 export const useAuth = (): AuthContextProps => {
   const context = useContext(AuthContext);
   if (!context) {
