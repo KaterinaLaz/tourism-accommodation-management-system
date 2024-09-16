@@ -174,7 +174,13 @@ const Register: React.FC = () => {
                                     type: 'radio',
                                     value: 'Housekeeper',
                                     checked: Role === 'Housekeeper',
-                                }
+                                },
+                                {
+                                    label: 'Maintenance',
+                                    type: 'radio',
+                                    value: 'Maintenance',
+                                    checked: Role === 'Maintenance',
+                                },
                             ]}
                             buttons={[
                                 {

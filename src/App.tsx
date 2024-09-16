@@ -60,6 +60,7 @@ const App: React.FC = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/booking-status" component={GestPage} />
             <ProtectedRoute path="/app" component={Sidemenu} isAuthenticated={isAuthenticated}/>
+            
           </IonRouterOutlet>
         </IonReactRouter>
       </AuthProvider>

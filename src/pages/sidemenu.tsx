@@ -12,30 +12,29 @@ import Notes from './Notes';
 import { getAuth, signOut } from '@firebase/auth';
 import Profile from './Profile';
 import Status from './Status';
-import { barChartOutline, calendarOutline, colorWandOutline, constructOutline, flashlightOutline, folderOpenOutline, hammerOutline, homeOutline, newspaperOutline, personCircleOutline, receiptOutline } from 'ionicons/icons'; 
+import { barChartOutline, calendarOutline, colorWandOutline, constructOutline, flashlightOutline, folderOpenOutline, hammerOutline, homeOutline, personCircleOutline, receiptOutline } from 'ionicons/icons'; 
 import Maintenance from './Maintenance';
-import ListMaintenance from '../components/ListMaintenance'
 import UsersList from './UsersList';
 import Register from './Register';
+import MyJob from './MyJob';
 
 const Page2cp: React.FC = () => {
-
-
     const history = useHistory();
     const auth = getAuth();
-    const { logout, role } = useAuth()
+    const { logout, role } = useAuth();  // Get the role from AuthContext
 
+    // Define available paths based on role
     const paths = [
-        { name: 'Home', url: '/app/home', icon: calendarOutline },
+        ...(role === 'Admin' || role === 'Housekeeper' ? [{ name: 'Home', url: '/app/home', icon: calendarOutline }] : []),
+        ...(role === 'Maintenance' ? [{ name: 'My Job', url: '/app/my-job', icon: hammerOutline }] : []),
         ...(role === 'Admin' ? [{ name: 'Realty Status', url: '/app/status', icon: barChartOutline }] : []), 
-        { name: 'To Do', url: '/app/todo', icon: receiptOutline },
-        { name: 'Villas', url: '/app/villas', icon: homeOutline },
-        { name: 'Lost and Found', url: '/app/lost-found', icon: flashlightOutline},
+        ...(role === 'Admin' || role === 'Housekeeper' ? [{ name: 'To Do', url: '/app/todo', icon: receiptOutline }] : []),
+        ...(role === 'Admin' || role === 'Housekeeper' ? [{ name: 'Villas', url: '/app/villas', icon: homeOutline }] : []),
+        ...(role === 'Admin' || role === 'Housekeeper' ? [{ name: 'Lost and Found', url: '/app/lost-found', icon: flashlightOutline }] : []),
         { name: 'Notes', url: '/app/notes', icon: colorWandOutline },
         ...(role === 'Admin' ? [{ name: 'Maintenance', url: '/app/maintenance', icon: constructOutline }] : []),
         ...(role === 'Admin' ? [{ name: 'Users List', url: '/app/list-of-users', icon: folderOpenOutline }] : []),
-        { name: 'My Account', url: '/app/profile', icon: personCircleOutline },
-        
+        ...(role === 'Admin' || role === 'Housekeeper' ? [{ name: 'My Account', url: '/app/profile', icon: personCircleOutline }] : []),
     ].filter(item => item);
 
     const handleLogout = async () => {
@@ -57,7 +56,7 @@ const Page2cp: React.FC = () => {
                             <IonTitle>House Hero</IonTitle>
                         </IonToolbar>
                     </IonHeader>
-                    <IonContent  color="dark">
+                    <IonContent color="dark">
                         {paths.map((item, index) => (
                             <IonMenuToggle key={index} autoHide={false}>
                                 <IonItem color="dark" routerLink={item!.url} routerDirection="root">
@@ -75,21 +74,22 @@ const Page2cp: React.FC = () => {
                 </IonMenu>
 
                 <IonRouterOutlet id="main">
-                    <Route exact path="/app/home" component={home} />
-                    <Route exact path="/app/todo" component={ToDo} />
-                    <Route exact path="/app/villas" component={Villas} />
+                    {/* Protected routes based on roles */}
+                    {role === 'Admin' || role === 'Housekeeper' ? <Route exact path="/app/home" component={home} /> : <Redirect to="/app/my-job" />}
+                    {role === 'Admin' || role === 'Housekeeper' ? <Route exact path="/app/todo" component={ToDo} /> : <Redirect to="/app/my-job" />}
+                    {role === 'Admin' || role === 'Housekeeper' ? <Route exact path="/app/villas" component={Villas} /> : <Redirect to="/app/my-job" />}
                     <Route exact path="/app/villas/add" component={AddHome} />
-                    <Route path="/app/lost-found" component={LostFound} />
+                    {role === 'Admin' || role === 'Housekeeper' ? <Route path="/app/lost-found" component={LostFound} /> : <Redirect to="/app/my-job" />}
                     <Route path="/app/notes" component={Notes} />
-                    <Route path='/app/profile' component={Profile} />
-                    <Route path="/app/status" component={Status} />
-                    <Route path="/app/maintenance" component={Maintenance} />
-                    <Route path="/app/list-maintenance" component={ListMaintenance} />
-                    <Route path="/app/list-of-users" component={UsersList} />
+                    {role === 'Admin' || role === 'Housekeeper' ? <Route path='/app/profile' component={Profile} />: <Redirect to="/app/profile"/>}
+                    {role === 'Admin' ? <Route path="/app/status" component={Status} /> : <Redirect to="/app/my-job" />}
+                    {role === 'Admin' ? <Route path="/app/maintenance" component={Maintenance} /> : <Redirect to="/app/my-job" />}
+                    {role === 'Admin' ? <Route path="/app/list-of-users" component={UsersList} /> : <Redirect to="/app/my-job" />}
                     <Route path="/app/users/add" component={Register} />
+                    {role === 'Maintenance' ? <Route exact path="/app/my-job" component={MyJob} /> : <Redirect to="/app/home" />}
                     <Route exact path="/app/villas/add/linen/:id" component={AddLinen} />
                     <Route exact path="/app">
-                        <Redirect to="/app/home" />
+                        <Redirect to={role === 'Maintenance' ? "/app/my-job" : "/app/home"} />
                     </Route>
                 </IonRouterOutlet>
             </IonSplitPane>
