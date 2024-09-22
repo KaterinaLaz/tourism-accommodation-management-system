@@ -38,7 +38,7 @@ const ItemList: React.FC<ItemListProps> = ({ items, onCheckboxChange, onShowDeta
                             <IonCheckbox
                                 slot="start"
                                 checked={item.received}
-                                onIonChange={(e) => onCheckboxChange(item.id, e.detail.checked)}
+                                onIonChange={(e: { detail: { checked: boolean; }; }) => onCheckboxChange(item.id, e.detail.checked)}
                             />
                             )}
                         </IonItem>

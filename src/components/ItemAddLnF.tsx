@@ -37,19 +37,19 @@ const AddItemModal: React.FC<AddItemModalProps> = ({ isOpen, onDidDismiss, onAdd
                             <IonCardContent>
                                 <IonItem color="dark">
                                     <IonLabel position="stacked">Title</IonLabel>
-                                    <IonInput value={newItem.title} onIonChange={(e) => setNewItem({ ...newItem, title: e.detail.value! })} />
+                                    <IonInput value={newItem.title} onIonChange={(e: { detail: { value: string; }; }) => setNewItem({ ...newItem, title: e.detail.value! })} />
                                 </IonItem>
                                 <IonItem color="dark">
                                     <IonLabel position="stacked">Who found it?</IonLabel>
-                                    <IonInput value={newItem.who} onIonChange={(e) => setNewItem({ ...newItem, who: e.detail.value! })} />
+                                    <IonInput value={newItem.who} onIonChange={(e: { detail: { value: string; }; }) => setNewItem({ ...newItem, who: e.detail.value! })} />
                                 </IonItem>
                                 <IonItem color="dark">
                                     <IonLabel position="stacked">Where was it found?</IonLabel>
-                                    <IonInput value={newItem.wher} onIonChange={(e) => setNewItem({ ...newItem, wher: e.detail.value! })} />
+                                    <IonInput value={newItem.wher} onIonChange={(e: { detail: { value: string; }; }) => setNewItem({ ...newItem, wher: e.detail.value! })} />
                                 </IonItem>
                                 <IonItem color="dark">
                                     <IonLabel position="stacked">When was it found?</IonLabel>
-                                    <IonInput type="date" value={newItem.when} onIonChange={(e) => setNewItem({ ...newItem, when: e.detail.value! })} />
+                                    <IonInput type="date" value={newItem.when} onIonChange={(e: { detail: { value: string; }; }) => setNewItem({ ...newItem, when: e.detail.value! })} />
                                 </IonItem>
                                 <IonButton color="primary" style={{ padding: '16px' }} expand="full" onClick={handleAddItem}>Add Item</IonButton>
                             </IonCardContent>
