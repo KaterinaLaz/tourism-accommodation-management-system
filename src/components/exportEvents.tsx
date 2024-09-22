@@ -1,6 +1,6 @@
-export const exportEvents = (data: { title: string; type: string; date: string; }[], filename: string) => {
+export const exportEvents = (data: { title: string; type: string; date: string; status: string }[], filename: string) => {
   // Prepare CSV content
-  const csvContent = data.map(event => `${event.title},${event.type},${event.date}`).join('\n');
+  const csvContent = data.map(event => `${event.title},${event.type},${event.date}, ${event.status}`).join('\n');
   const csvHeader = 'Title,Type,Date\n';
   const csvData = csvHeader + csvContent;
 

@@ -14,6 +14,9 @@ import { doc, getDoc } from 'firebase/firestore';
 
 import { useAuth } from '../components/AuthContext'; 
 
+import logo from './logo-1.png';
+
+
 const Login: React.FC = () => {
     // setEmail & setPassword they are function to "keep" users credentials 
     //[,] they are tables
@@ -32,6 +35,17 @@ const Login: React.FC = () => {
             setPassword(''); // Reset password field
         }
     }, [isAuthenticated]);
+
+    // Clear error message after a few seconds
+    useEffect(() => {
+        if (errorMessage) {
+            const timer = setTimeout(() => {
+                setErrorMessage(''); // Clear the error message after 3 seconds
+            }, 3000); // 3 seconds
+
+            return () => clearTimeout(timer); // Clear timeout if component unmounts or errorMessage changes
+        }
+    }, [errorMessage]);
     
     
     // If pres “FORGOT PASSWORD”, Firebase sent you an auto email to change your password
@@ -82,7 +96,7 @@ const Login: React.FC = () => {
     return (
         <IonPage >
             <IonHeader >
-                <IonToolbar color={'new'} > 
+                <IonToolbar color="new" > 
                     
                     <IonTitle style={{ fontSize: '35px' , textAlign: 'center'}}> <IonIcon icon={sparklesOutline}></IonIcon>  House Hero  <IonIcon icon={sparklesOutline}> </IonIcon></IonTitle>
                     
@@ -90,22 +104,18 @@ const Login: React.FC = () => {
             </IonHeader>
             <IonContent  color={'light'} className="ion-padding" >
                 <IonGrid fixed >
-                    
-
-                    <IonRow class="ion-justify-content-center">
-                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
-                        
+                    <IonRow className="ion-justify-content-center">
                         <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
-                            <IonImg src='src\pages\logo-1.png'>
-                            </IonImg>
-                        </IonCol>
+                            <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
+                                <IonImg src={logo}></IonImg>
+                            </IonCol>
                             <IonCard   color={'dark'}>
                                 <IonCardContent  >
                                     <IonInput 
                                         value={Email}
                                         mode='md'
                                         label='Email' 
-                                        labelPlacement="floating" 
+                                        labelPlacement="floating"
                                         placeholder="Enter your Email"
                                         onIonChange={(e: any) => setEmail(e.target.value)}
                                     />
@@ -114,7 +124,7 @@ const Login: React.FC = () => {
                                         mode='md'
                                         label='Password' 
                                         type="password" 
-                                        labelPlacement="floating" 
+                                        labelPlacement="floating"
                                         placeholder="Enter your Password" 
                                         onIonChange={(e: any) => setPassword(e.target.value)}
                                     />
@@ -126,17 +136,25 @@ const Login: React.FC = () => {
                                     <IonButton onClick={forgotPassword} className='forgot-password-baton' fill="clear"  expand='block' style={{ color: '#74a59c' }}>
                                         Forgot Password?
                                     </IonButton>
-                                    <IonLoading  isOpen={loading} message={'Please wait...'} />
-                                    {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
+                                    <IonButton className='ion-margin-top'routerLink='/booking-status'  type='submit' expand='block'  color={'warning'} >
+                                        To See Booking Status
+                                        <IonIcon icon={arrowForwardOutline}/>
+                                    </IonButton>
+                                    <IonButton className='ion-margin-top' routerLink='/register' expand='block' fill="clear" color={'primary'}>
+                                        Register
+                                        <IonIcon icon={personCircleOutline}/>
+                                    </IonButton>
+                                    <IonLoading isOpen={loading} message={'Please wait...'} />
+                                    {errorMessage && 
+                                    <div 
+                                    style={{ color: 'red', marginTop: '10px' }}>
+                                        {errorMessage}
+                                    </div>}
                                 </IonCardContent>
                             </IonCard>
                         </IonCol>
-                        
                     </IonRow>
-                    <IonButton className='ion-margin-top'routerLink='/booking-status'  type='submit' expand='block'  color={'warning'} >
-                            To See Booking Status
-                            <IonIcon icon={arrowForwardOutline}/>
-                        </IonButton>
+                    
                 </IonGrid>                            
             </IonContent>
         </IonPage>

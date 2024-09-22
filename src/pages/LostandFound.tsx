@@ -9,7 +9,6 @@ import ItemList from '../components/ItemListLnF';
 import ItemDetailModal from '../components/ItemDetailLnF';
 import AddItemModal from '../components/ItemAddLnF';
 import DeleteConfirmationAlert from '../components/DeleteItemLnF';
-import { getAuth } from '@firebase/auth';
 
 const LostFound: React.FC = () => {
     // State for items, search, and filtering
@@ -152,7 +151,7 @@ const LostFound: React.FC = () => {
                 <IonSearchbar
                     color="dark"
                     value={searchTerm}
-                    onIonChange={(e) => setSearchTerm(e.detail.value!)}
+                    onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setSearchTerm(e.detail.value!)}
                     placeholder="Search for items..."
                 />
 

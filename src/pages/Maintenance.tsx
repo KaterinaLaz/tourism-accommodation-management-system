@@ -2,7 +2,6 @@ import { IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonHeader, 
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { dataFire } from './FirebaseConfig';
-import { useAuth } from '../components/AuthContext'; // Import the useAuth hook
 import './Maintenance.css';
 
 // Define the User type with the expected fields
@@ -14,10 +13,10 @@ interface User {
 }
 
 const Maintenance: React.FC = () => {
-  const { role } = useAuth(); // Get the role from Auth context
+  
   const [problemDescription, setProblemDescription] = useState<string>(''); 
   const [selectedMaintainer, setSelectedMaintainer] = useState<string>(''); 
-  const [location, setLocation] = useState<string>(''); 
+  const [location, setLocation] = useState<any>(''); 
   const [maintainers, setMaintainers] = useState<User[]>([]); // Use the User type for maintainers
 
   // Fetch only users with the "Maintenance" role from the "users" collection
@@ -55,6 +54,7 @@ const Maintenance: React.FC = () => {
         problemDescription,
         selectedMaintainer,
         location,
+        done: false,
         createdAt: new Date(),
       });
 
@@ -82,26 +82,27 @@ const Maintenance: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent color={'light'} className='ion-padding'>
+        <IonCard color={'dark'}>
         <IonItem color={'dark'}>
           <IonTextarea
             value={problemDescription}
             placeholder="Damage"
             autoGrow={true}
-            onIonChange={(e) => setProblemDescription(e.detail.value!)}
+            onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setProblemDescription(e.detail.value!)}
           ></IonTextarea>
         </IonItem>
         <IonItem color={'dark'}>
           <IonInput 
             value={location}
             placeholder="Where"
-            onIonChange={(e) => setLocation(e.detail.value!)}
+            onIonChange={(e: { detail: { value: any; }; }) => setLocation(e.detail.value ?? '')}
           />
         </IonItem>
         <IonItem color={'dark'}>
           <IonSelect
             value={selectedMaintainer} 
             placeholder="Select maintainer"
-            onIonChange={(e) => setSelectedMaintainer(e.detail.value)}
+            onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setSelectedMaintainer(e.detail.value)}
             className="custom-select"
           >
             {maintainers.map((maintainer) => (
@@ -114,6 +115,7 @@ const Maintenance: React.FC = () => {
         <IonButton color={'primary'} expand="block" onClick={handleSubmit} >
           Inform 
         </IonButton>
+        </IonCard>
       </IonContent>
     </IonPage>
   );

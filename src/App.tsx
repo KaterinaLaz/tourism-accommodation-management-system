@@ -28,6 +28,9 @@ import ProtectedRoute from './components/PrivateRoute';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import GestPage from './pages/GestPage';
+import Register from './pages/Register';
+
+
 
 setupIonicReact();
 
@@ -35,6 +38,8 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
+
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
@@ -59,8 +64,8 @@ const App: React.FC = () => {
             <Route exact path="/" render={() => <Redirect to={isAuthenticated ? "/app" : "/login"} />} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/booking-status" component={GestPage} />
+            <Route exact path="/register" component={Register} />
             <ProtectedRoute path="/app" component={Sidemenu} isAuthenticated={isAuthenticated}/>
-            
           </IonRouterOutlet>
         </IonReactRouter>
       </AuthProvider>

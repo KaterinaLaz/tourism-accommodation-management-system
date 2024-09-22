@@ -15,8 +15,9 @@ import Status from './Status';
 import { barChartOutline, calendarOutline, colorWandOutline, constructOutline, flashlightOutline, folderOpenOutline, hammerOutline, homeOutline, personCircleOutline, receiptOutline } from 'ionicons/icons'; 
 import Maintenance from './Maintenance';
 import UsersList from './UsersList';
-import Register from './Register';
+
 import MyJob from './MyJob';
+import AddNewUser from './AddNewUser';
 
 const Page2cp: React.FC = () => {
     const history = useHistory();
@@ -74,18 +75,17 @@ const Page2cp: React.FC = () => {
                 </IonMenu>
 
                 <IonRouterOutlet id="main">
-                    {/* Protected routes based on roles */}
                     {role === 'Admin' || role === 'Housekeeper' ? <Route exact path="/app/home" component={home} /> : <Redirect to="/app/my-job" />}
                     {role === 'Admin' || role === 'Housekeeper' ? <Route exact path="/app/todo" component={ToDo} /> : <Redirect to="/app/my-job" />}
                     {role === 'Admin' || role === 'Housekeeper' ? <Route exact path="/app/villas" component={Villas} /> : <Redirect to="/app/my-job" />}
                     <Route exact path="/app/villas/add" component={AddHome} />
                     {role === 'Admin' || role === 'Housekeeper' ? <Route path="/app/lost-found" component={LostFound} /> : <Redirect to="/app/my-job" />}
                     <Route path="/app/notes" component={Notes} />
-                    {role === 'Admin' || role === 'Housekeeper' ? <Route path='/app/profile' component={Profile} />: <Redirect to="/app/profile"/>}
+                    {role === 'Admin' || role === 'Housekeeper' ? <Route path='/app/profile' component={Profile} /> : <Redirect to="/app/profile"/>}
                     {role === 'Admin' ? <Route path="/app/status" component={Status} /> : <Redirect to="/app/my-job" />}
                     {role === 'Admin' ? <Route path="/app/maintenance" component={Maintenance} /> : <Redirect to="/app/my-job" />}
                     {role === 'Admin' ? <Route path="/app/list-of-users" component={UsersList} /> : <Redirect to="/app/my-job" />}
-                    <Route path="/app/users/add" component={Register} />
+                    <Route path="/app/users/add" component={AddNewUser} />
                     {role === 'Maintenance' ? <Route exact path="/app/my-job" component={MyJob} /> : <Redirect to="/app/home" />}
                     <Route exact path="/app/villas/add/linen/:id" component={AddLinen} />
                     <Route exact path="/app">

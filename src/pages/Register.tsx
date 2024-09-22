@@ -1,32 +1,26 @@
-import { IonAlert, IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonLoading, IonMenuButton, IonPage, IonSelect, IonSelectOption, IonTitle, IonToast, IonToolbar } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonImg, IonInput, IonLoading, IonMenuButton, IonPage, IonRow, IonTitle, IonToast, IonToolbar } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 
 import { auth } from './FirebaseConfig';
 import { dataFire } from './FirebaseConfig';
 
-import { createUserWithEmailAndPassword, deleteUser, getAuth, signOut } from 'firebase/auth';
-import { doc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { useHistory } from 'react-router';
 
-
-import {  updateDoc, deleteField } from "firebase/firestore";
-
+import logo from './logo-1.png';
 
 
 const Register: React.FC = () => {
-    
-    const [Email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [Name, setName] = useState('');
-    const [Telephone, setTelephone] = useState('');
+    const [Email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [Name, setName] = useState<string>('');
+    const [Telephone, setTelephone] = useState<string>('');
 
     const [loading, setLoading] = useState(false);
     const [successAcount, setSuccessAcount] = useState(false);
     const [error, setError] = useState('');
     const history = useHistory();
-    const [Role, setRole] = useState('User')
-    const [showAlert, setShowAlert] = useState(false);
-    
 
     useEffect(() => {
         const clearFields = () => {
@@ -34,12 +28,9 @@ const Register: React.FC = () => {
             setPassword('');
             setName('');
             setTelephone('');
-            setRole('');
         };
 
-        clearFields();
-
-        const unlisten = history.listen((location, action) => {
+        const unlisten = history.listen((location: { pathname: string }, action: any) => {
             if (location.pathname === '/register') {
                 clearFields();
             }
@@ -50,46 +41,52 @@ const Register: React.FC = () => {
         };
     }, [history]);
 
+    useEffect(() => {
+        if (successAcount) {
+            setTimeout(() => {
+                history.push('/login'); // Redirect to login page after success
+            }, 2000); // Wait for 2 seconds before redirecting
+        }
+    }, [successAcount, history]);
 
+    // Function to create a new user in Firebase Authentication and store their data in Firestore
     async function registerUser() {
         setLoading(true);
         setError('');
         try {
+            const currentUser = auth.currentUser;
+    
+            // Create the new user
             const userCredential = await createUserWithEmailAndPassword(auth, Email, password);
             const UserID = userCredential.user.uid;
-
-            await setDoc(doc(dataFire, 'users', UserID), {
+    
+            // Save the new user's data in the 'pendingUsers' collection without a role
+            await setDoc(doc(dataFire, 'pendingUsers', UserID), {
                 email: Email,
                 fullname: Name,
                 phonenumber: Telephone,
-                role: Role,
+                status: 'pending', // The status is pending
+                createdAt: new Date()
             });
-
+    
             setSuccessAcount(true);
             setLoading(false);
-
+    
+            // Clear form fields after user creation
             setEmail('');
             setPassword('');
             setName('');
             setTelephone('');
-
+    
+            // Sign out the new user
+            await signOut(auth);
+    
             setTimeout(() => {
-                history.push('/app/list-of-users'); 
+                history.push('/login'); // Redirect to the login page or wherever you want
             }, 2000);
         } catch (error: any) {
             if (error.code === 'auth/email-already-in-use') {
                 setError('This email is already in use!');
-
-                // Handle user deletion if necessary
-                try {
-                    const user = auth.currentUser;
-                    if (user) {
-                        await deleteUser(user);
-                    }
-                } catch (deleteError) {
-                    console.error("Error deleting user: ", deleteError);
-                }
-
             } else {
                 setError(error.message);
             }
@@ -97,23 +94,24 @@ const Register: React.FC = () => {
         }
     }
 
-    const handleRoleChange = (newRole: string) => {
-        setRole(newRole);
-    }
-    
-
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar color={'secondary'}>
-                    
-                    <IonTitle>Make a Profile</IonTitle>
-                    <IonButtons slot='start'>
-                        <IonMenuButton></IonMenuButton>
-                    </IonButtons>
+                    <IonTitle>Create Account</IonTitle>
+                    <IonMenuButton slot='start' />
                 </IonToolbar>
             </IonHeader>
-            <IonContent color={'light'}>
+            <IonContent  color={'dark'} className="ion-padding" >
+                <IonGrid fixed >
+                    <IonRow className="ion-justify-content-center">
+                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
+                            <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
+                                <IonImg src={logo}></IonImg>
+                            </IonCol>
+                        </IonCol>
+                    </IonRow>
+                </IonGrid>
                 <IonCard color={'dark'}>
                     <IonCardContent>
                         <IonInput
@@ -121,23 +119,22 @@ const Register: React.FC = () => {
                             labelPlacement="floating"
                             placeholder="Enter Your Full Name"
                             value={Name}
-                            onIonChange={(e) => setName(e.detail.value!)}
+                            onIonChange={(e: { detail: { value: any; }; }) => setName(e.detail.value!)}
                         />
-                        
                         <IonInput
                             label='Telephone'
                             type='tel'
                             labelPlacement="floating"
                             placeholder="Enter Your Phone Number"
                             value={Telephone}
-                            onIonChange={(e) => setTelephone(e.detail.value!)}
+                            onIonChange={(e: { detail: { value: any; }; }) => setTelephone(e.detail.value!)}
                         />
                         <IonInput
                             label='Email'
                             labelPlacement="floating"
                             placeholder="Enter your Email"
                             value={Email}
-                            onIonChange={(e) => setEmail(e.detail.value!)}
+                            onIonChange={(e: { detail: { value: any; }; }) => setEmail(e.detail.value!)}
                         />
                         <IonInput
                             label='Password'
@@ -145,66 +142,20 @@ const Register: React.FC = () => {
                             labelPlacement="floating"
                             placeholder="Enter your Password"
                             value={password}
-                            onIonChange={(e) => setPassword(e.detail.value!)}
+                            onIonChange={(e: { detail: { value: any; }; }) => setPassword(e.detail.value!)}
                         />
-                        <IonItem color={'dark'} button onClick={() => setShowAlert(true)}>
-                            <IonLabel>
-                                Role: {Role}  {/* Display the selected role */}
-                            </IonLabel>
-                        </IonItem>
-                        
-                        
+
                         <IonButton onClick={registerUser} color={'secondary'} expand='block'>
                             Register
                         </IonButton>
-                        <IonAlert
-                            isOpen={showAlert}
-                            onDidDismiss={() => setShowAlert(false)}
-                            header="Select Role"
-                            inputs={[
-                            
-                                {
-                                    label: 'Admin',
-                                    type: 'radio',
-                                    value: 'Admin',
-                                    checked: Role === 'Admin',
-                                },
-                                {
-                                    label: 'Housekeeper',
-                                    type: 'radio',
-                                    value: 'Housekeeper',
-                                    checked: Role === 'Housekeeper',
-                                },
-                                {
-                                    label: 'Maintenance',
-                                    type: 'radio',
-                                    value: 'Maintenance',
-                                    checked: Role === 'Maintenance',
-                                },
-                            ]}
-                            buttons={[
-                                {
-                                    text: 'Cancel',
-                                    role: 'cancel',
-                                },
-                                {
-                                    text: 'OK',
-                                    handler: (selectedRole: string) => {
-                                        handleRoleChange(selectedRole);
-                                    },
-                                }
-                            ]}
-                        />
-
-                        
                     </IonCardContent>
                 </IonCard>
                 <IonLoading isOpen={loading} message="Creating account..." />
                 <IonToast
                     isOpen={successAcount}
-                    message="Account created successfully!"
+                    message="We will soon accept your request"
                     duration={2000}
-                    color="success"
+                    color='warning'
                 />
                 <IonToast
                     isOpen={!!error}
