@@ -10,7 +10,7 @@ import { cloudDownloadOutline } from 'ionicons/icons';
 
 const Todo: React.FC = () => {
     const [items, setItems] = useState<{realtyId?: string; id: string; title: string; type: string; date: string; isDone: boolean; featureIndex?: number  }[]>([]);
-    const [events, setEvents] = useState<{ realtyId?: string; title: string; type: string; date: string }[]>([]); // Store events for export
+    const [events, setEvents] = useState<{ realtyId?: string; title: string; type: string; date: string; status: string }[]>([]); // Store events for export
     const [loading, setLoading] = useState(true);
     const userId = useUserId(); // Use the custom hook to get the user ID
     
@@ -25,7 +25,7 @@ const Todo: React.FC = () => {
         try {
           const querySnapshot = await getDocs(collection(dataFire, 'events'));
           let allItems: React.SetStateAction<{ realtyId?: string; id: string; title: string; type: string; date: string; isDone: boolean; featureIndex?: number; }[]> | { id: string; title: any; realtyId?: any; type: string; date: any; isDone: any; featureIndex?: number; }[] = [];
-          let eventsForExport: React.SetStateAction<{ realtyId?: string; title: string; type: string; date: string; }[]> | { title: any; type: string; date: any; status: string; }[] = [];
+          let eventsForExport: React.SetStateAction<{ realtyId?: string; title: string; type: string; date: string; status: string }[]> | { title: any; type: string; date: any; status: string; }[] = [];
     
           querySnapshot.docs.forEach(doc => {
             const data = doc.data();
@@ -33,6 +33,9 @@ const Todo: React.FC = () => {
             const eventTitle = data.title || 'No Title';
             const eventId = doc.id;
             const realtyId = data.realtyId || ' ';
+            const assignedToOutDone = data.assignedToOutDone || false;
+            const assignedToInDone = data.assignedToInDone || false;
+            const isCompleted = data.isCompleted || false;
     
             // Check-in events
             if (Array.isArray(data.assignedToIn) && data.assignedToIn.includes(userId)) {
@@ -55,7 +58,7 @@ const Todo: React.FC = () => {
                 title: eventTitle,
                 type: 'Check-In',
                 date: checkInDate ? checkInDate.toISOString() : 'No Date',
-                status: data.assignedToInDone ? 'Done' : 'Not Done',
+                status: assignedToInDone ? 'Done' : 'Not Done',
               });
             }
     
@@ -80,7 +83,7 @@ const Todo: React.FC = () => {
                 title: eventTitle,
                 type: 'Check-Out',
                 date: checkOutDate ? checkOutDate.toISOString() : 'No Date',
-                status: data.assignedToOutDone ? 'Done' : 'Not Done',
+                status: assignedToOutDone ? 'Done' : 'Not Done',
               });
             }
     
@@ -107,7 +110,7 @@ const Todo: React.FC = () => {
                   title: `${eventTitle} - ${feature.title}`,
                   type: 'Extra',
                   date: feature.date || 'No Date',
-                  status: feature.done ? 'Done' : 'Not Done',
+                  status: isCompleted ? 'Done' : 'Not Done',
                 });
               });
             }
@@ -133,10 +136,11 @@ const Todo: React.FC = () => {
     }, [userId]);
     
     const handleExport = () => {
-      const exportData = events.map(({ title, type, date }) => ({
+      const exportData = events.map(({ title, type, date, status }) => ({
         title,
         type,
         date: new Date(date).toLocaleDateString(),
+        status
       }));
     
       exportEvents(exportData, 'events.csv');

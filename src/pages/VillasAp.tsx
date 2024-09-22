@@ -99,7 +99,7 @@ const VillasAp: React.FC = () => {
         const querySnapshot = await getDocs(collection(dataFire, "linen"))
         const villaLinen = querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()}))
         setVillaLinen(villaLinen)
-        console.log(villaLinen)
+        
     }
 
     //function for more details about villas
@@ -112,12 +112,12 @@ const VillasAp: React.FC = () => {
     }
 
     const getSelectLinen = (villaApId: any) => {
-        console.log(villaApId)
+        
         const linens = villaLinen.find(linen => linen.id === villaApId)
         if (linens){
             setSelectVillaLinen(linens) 
             setEditLinenForm(linens)
-            console.log(linens)
+           
         }     
     }
     //to Delete the selected apartment

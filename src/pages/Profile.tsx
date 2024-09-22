@@ -5,7 +5,7 @@ import {
 } from '@ionic/react';
 import { auth, dataFire } from './FirebaseConfig';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { pencil, closeCircleOutline } from 'ionicons/icons';
+import { pencil, save, closeCircleOutline } from 'ionicons/icons';
 
 const Profile: React.FC = () => {
     const [userData, setUserData] = useState<any>(null);
@@ -107,7 +107,7 @@ const Profile: React.FC = () => {
 
                             <IonItem color={'dark'} lines="full">
                                 <IonLabel>Role</IonLabel>
-                                <IonText>{userData.role}</IonText>
+                                <IonText>{userData.role || 'Not provided'}</IonText>
                             </IonItem>
                         </>
                     ) : (
@@ -160,10 +160,7 @@ const Profile: React.FC = () => {
                             />
                         </IonItem>
 
-                        <IonItem color={'dark'}>
-                            <IonLabel position="stacked">Role</IonLabel>
-                            <IonText>{userData.role}</IonText>
-                        </IonItem>
+                        
 
                         <IonButton expand="block" color="secondary" onClick={handleSaveClick}>
                             Save

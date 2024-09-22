@@ -78,7 +78,7 @@ const MyJob: React.FC = () => {
                   <IonCheckbox
                     slot="end"
                     checked={job.done}
-                    onIonChange={(e) => handleJobDone(job.id, e.detail.checked!)} // Update Firestore and remove the job when marked as done
+                    onIonChange={(e: { detail: { checked: boolean; }; }) => handleJobDone(job.id, e.detail.checked!)} // Update Firestore and remove the job when marked as done
                   />
                 </IonItem>
               </IonCard>

@@ -23,7 +23,19 @@ ion-datetime{
   color: black !important; /* Ensure that the text color is always black */
   font-size: 16px; /* Adjust the size to make it clearer */
 }
+.mobile-only {
+  display: none;
+}
 
+@media (max-width: 768px) {
+  .mobile-only {
+    display: block;
+  }
+}
+.alert-wrapper.sc-ion-alert-md {
+  height: 70%;
+  min-width: 70%;
+}
 
 
 

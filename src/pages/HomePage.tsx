@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   IonApp, IonContent, IonButton, IonItem, IonLabel, IonInput, IonModal, IonHeader, IonToolbar, IonTitle,
   IonCard, IonCol, IonGrid, IonRow, IonButtons, IonMenuButton, IonPage, IonDatetime, IonSelect, IonSelectOption,
-  IonFab,IonFabButton,IonIcon, } from '@ionic/react';
+  IonFab,IonFabButton,IonIcon,
+  IonSearchbar, } from '@ionic/react';
 import { Calendar, DateRangeFormatFunction, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import { getEvents, addEvent, updateEvent, deleteEvent, getUsers } from './firebaseFunctions';
-import './home.css';
+import './Home.css';
 import {addCircleOutline} from 'ionicons/icons'
 import { useAuth } from '../components/AuthContext';
 import { collection, getDocs } from 'firebase/firestore';
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState<string>(new Date().toISOString());
-  const [endDate, setEndDate] = useState<string>(new Date().toISOString());
+  const [endDate, setEndDate] = useState(new Date().toISOString());
   const [assignedToIn, setAssignedToIn] = useState<string>('');
   const [assignedToOut, setAssignedToOut] = useState<string>('');
   const [users, setUsers] = useState<any[]>([]);
@@ -52,6 +53,8 @@ const Home: React.FC = () => {
   const { role } = useAuth()
   const [realtyId, setRealtyId] = useState<string>('');
   const [realtyList, setRealtyList] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  
 
   const isEditable = role === 'Admin';
 
@@ -59,7 +62,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchRealty = async () => {
       const realtySnapshot = await getDocs(collection(dataFire, 'realty')); // Change 'realty' to your collection name
-      const realtyData = realtySnapshot.docs.map(doc => ({
+      const realtyData = realtySnapshot.docs.map((doc: { id: any; data: () => any; }) => ({
         id: doc.id,
         ...doc.data(),
       }));
@@ -178,16 +181,17 @@ const Home: React.FC = () => {
   const handleDateClick = (date: Date) => {
     if (role !== 'Admin') {
       alert("You don't have permission to create an event.");
-      return;  // Ακύρωση ανοίγματος του modal για μη Admin χρήστες
+      return;  
     }
     setSelectedEvent(null);
     setTitle('');
-    setStartDate(date.toISOString());
-    setEndDate(date.toISOString());
+    setStartDate(moment(date).toISOString()); // Using moment to format the date properly
+    setEndDate(moment(date).toISOString());   // Using moment to format the date properly
     setAssignedToIn('');
     setAssignedToOut('');
     setShowModal(true);
-    setRealtyId('')
+    setRealtyId('');
+  
   };
 
   const handleDeleteEvent = async () => {
@@ -264,7 +268,7 @@ const Home: React.FC = () => {
         </IonHeader>
 
         <IonContent color={'dark'} className="ion-padding">
-          <div style={{ height: '700', color: 'darkblue' }}>
+          <div style={{ height: '700px', color: 'darkblue' }}>
             <Calendar
               
               localizer={localizer}
@@ -275,11 +279,11 @@ const Home: React.FC = () => {
               }))}
               startAccessor="start"
               endAccessor="end"
-              style={{ height: 700 }}
+              style={{ height: 700, padding:20 }}
               formats={formats}
               selectable
-              onSelectSlot={slotInfo => handleDateClick(slotInfo.start)}
-              onSelectEvent={event => handleEventSelect(event as Event)}
+              onSelectSlot={(slotInfo: { start: Date; }) => handleDateClick(slotInfo.start)}
+              onSelectEvent={(event: Event) => handleEventSelect(event)}
             />
           </div>
 
@@ -295,14 +299,14 @@ const Home: React.FC = () => {
               <IonCard  color={'dark'}>
                 <IonItem color={'dark'}>
                   <IonLabel position="stacked">Event</IonLabel>
-                  <IonInput value={title} placeholder="House Name" onIonChange={e => setTitle(e.detail.value!)} />
+                  <IonInput value={title} placeholder="House Name" onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setTitle(e.detail.value!)} />
                 </IonItem>
                 <IonItem color={'dark'}>
           <IonLabel position="stacked">Select Realty (Property)</IonLabel>
           <IonSelect
             value={realtyId}
             placeholder="Select realty"
-            onIonChange={(e) => setRealtyId(e.detail.value)}
+            onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setRealtyId(e.detail.value)}
           >
             {realtyList.map((realty) => (
               <IonSelectOption key={realty.id} value={realty.id}>
@@ -325,10 +329,16 @@ const Home: React.FC = () => {
                   <IonCol size='6' color={'dark'}>
                     <IonItem color={'dark'}>
                       <IonLabel>Assign to</IonLabel>
-                        <IonSelect multiple={true}  value={assignedToIn} placeholder="Select User" onIonChange={e => setAssignedToIn(e.detail.value)}>
-                          {users.map(user => (
+                        <IonSelect label="Select User"  multiple={true}  value={assignedToIn} placeholder="Select User" onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setAssignedToIn(e.detail.value)} >
+                            
+                        {users
+                            .filter(user => user.role === 'Housekeeper' || user.role === 'Admin') // Filter to only show housekeepers and admins
+                            .map(user => (
+                            
                             <IonSelectOption key={user.id} value={user.id}>
+                              
                               {user.fullname}
+                              
                             </IonSelectOption>
                           ))}
                         </IonSelect>
@@ -350,8 +360,10 @@ const Home: React.FC = () => {
                   <IonCol size='6'>
                     <IonItem color={'dark'}>
                       <IonLabel>Assign to</IonLabel>
-                      <IonSelect   multiple={true}  value={assignedToOut} placeholder="Select User" onIonChange={e => setAssignedToOut(e.detail.value)}>
-                        {users.map(user => (
+                      <IonSelect label="Select User"  multiple={true}  value={assignedToOut} placeholder="Select User" onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setAssignedToOut(e.detail.value)}>
+                      {users
+                            .filter(user => user.role === 'Housekeeper' || user.role === 'Admin') // Filter to only show housekeepers and admins
+                            .map(user => (
                           <IonSelectOption key={user.id} value={user.id}>
                             {user.fullname}
                           </IonSelectOption>
@@ -368,21 +380,26 @@ const Home: React.FC = () => {
                     <IonCard key={index} color={'dark'}>
                       <IonItem color={'dark'}>
                         <IonLabel position="floating">Linen change or cleanin </IonLabel>
-                        <IonInput value={feature.title} onIonChange={e => handleFeatureChange(index, 'title', e.detail.value!)} />
+                        <IonInput value={feature.title} onIonChange={(e: { detail: { value: string | string[]; }; }) => handleFeatureChange(index, 'title', e.detail.value!)} />
                       </IonItem>
 
                       
                         <IonItem color={'dark'}>
-                          <IonDatetime presentation="date" value={feature.date} onIonChange={e => handleFeatureChange(index, 'date', e.detail.value!)} />
+                          <IonDatetime presentation="date" value={feature.date} onIonChange={(e: { detail: { value: string | string[]; }; }) => handleFeatureChange(index, 'date', e.detail.value!)} />
                         </IonItem>
                      
 
                       
                         <IonItem color={'dark'}>
                           <IonLabel>Assign to</IonLabel>
-                          <IonSelect multiple={true} value={feature.assignedTo} placeholder="Select User" onIonChange={e => handleFeatureChange(index, 'assignedTo', e.detail.value!)}>
-                            {users.map(user => (
+                          
+                          <IonSelect label="Select User" multiple={true} value={feature.assignedTo} placeholder="Select User" onIonChange={(e: { detail: { value: string | string[]; }; }) => handleFeatureChange(index, 'assignedTo', e.detail.value!)}>
+                          
+                          {users
+                            .filter(user => user.role === 'Housekeeper' || user.role === 'Admin') // Filter to only show housekeepers and admins
+                            .map(user => (
                               <IonSelectOption key={user.id} value={user.id}>
+                                
                                 {user.fullname}
                               </IonSelectOption>
                             ))}
@@ -433,7 +450,7 @@ const Home: React.FC = () => {
             <IonDatetime
               presentation="date-time"
               value={startDate}
-              onIonChange={e => {
+              onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => {
                 if (typeof e.detail.value === 'string') {
                   setStartDate(e.detail.value);
                 }
@@ -451,7 +468,7 @@ const Home: React.FC = () => {
               <IonDatetime
                 presentation="date-time"
                 value={endDate}
-                onIonChange={e => {
+                onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => {
                   if (typeof e.detail.value === 'string') {
                     setEndDate(e.detail.value);
                   }
@@ -462,7 +479,25 @@ const Home: React.FC = () => {
             </IonContent>
             {errorMessage && <div style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
           </IonModal>
+          {role === "Admin" && (
+            <IonFab horizontal="end" vertical="bottom" className="mobile-only">
+              <IonFabButton onClick={() => {
+                setSelectedEvent(null);
+                setTitle('');
+                setStartDate(new Date().toISOString());
+                setEndDate(new Date().toISOString());
+                setRealtyId('');
+                setAssignedToIn('');
+                setAssignedToOut('');
+                setExtraFeatures([]);
+                setShowModal(true);
+              }} color="secondary">
+                <IonIcon icon={addCircleOutline}></IonIcon>
+              </IonFabButton>
+              </IonFab>
+              )}
         </IonContent>
+    
       </IonPage>
     </IonApp>
   );

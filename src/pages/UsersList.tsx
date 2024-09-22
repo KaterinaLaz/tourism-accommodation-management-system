@@ -1,8 +1,8 @@
-import { IonButton, IonButtons, IonCard, IonCardContent, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonTitle, IonToolbar, IonAlert } from '@ionic/react';
+import { IonButton, IonButtons,  IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonLabel,  IonMenuButton, IonPage, IonTitle, IonToolbar, IonAlert, IonBadge } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { dataFire } from './FirebaseConfig'; 
-import { addOutline, trash, trashOutline } from 'ionicons/icons'; 
+import { addOutline, informationCircleOutline, trash, trashOutline } from 'ionicons/icons'; 
 import { useHistory } from 'react-router';
 
 interface User {
@@ -15,6 +15,7 @@ interface User {
 
 const ListOfUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [pendingUserCount, setPendingUserCount] = useState(0); // To track the number of pending users
   const [showAlert, setShowAlert] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const history = useHistory();
@@ -40,12 +41,21 @@ const ListOfUsers: React.FC = () => {
     setUsers(usersList);
   };
 
+  // Fetch pending users count
+  const fetchPendingUsersCount = async () => {
+    const querySnapshot = await getDocs(collection(dataFire, 'pendingUsers'));
+    const pendingCount = querySnapshot.size; // Get the number of pending users
+    setPendingUserCount(pendingCount);
+  };
+
   useEffect(() => {
     fetchUsers(); // Fetch users initially
+    fetchPendingUsersCount(); // Fetch pending users count initially
 
-    const unlisten = history.listen((location, action) => {
+    const unlisten = history.listen((location: { pathname: string; }, action: any) => {
       if (location.pathname === '/app/list-of-users') {
         fetchUsers(); // Fetch users again when the user returns to this page
+        fetchPendingUsersCount(); // Fetch pending users count when returning
       }
     });
 
@@ -92,14 +102,21 @@ const ListOfUsers: React.FC = () => {
               <p>Role: {user.role}</p>
             </IonLabel>
             <IonButton fill="clear" slot="end" color='danger' onClick={() => confirmDelete(user)}>
-              <IonIcon   icon={trashOutline} />
+              <IonIcon icon={trashOutline} />
             </IonButton>
           </IonItem>
         ))}
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton color="secondary" onClick={navigateToRegister}> 
-            <IonIcon icon={addOutline} />
+          <IonFabButton color={pendingUserCount > 0 ? 'danger' : 'primary'}  onClick={navigateToRegister}>
+            <IonIcon
+              icon={informationCircleOutline}
+            />
+            {pendingUserCount > 0 && (
+              <IonBadge color="danger" style={{ position: 'absolute', top: '-10px', right: '-10px' }}>
+                {pendingUserCount}
+              </IonBadge>
+            )}
           </IonFabButton>
         </IonFab>
 

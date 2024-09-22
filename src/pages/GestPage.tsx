@@ -77,6 +77,12 @@ const Gestpage: React.FC = () => {
         <IonGrid fixed>
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4">
+            <IonRow className="ion-justify-content-center">
+                        <IonCol size="12" sizeMd="8" sizeLg="6" sizeXl="4" > 
+                            <IonImg src='src\pages\logo-1.png'>
+                            </IonImg>
+                        </IonCol>
+                    </IonRow>
               <IonCard color="light">
                 <IonCardContent>
                   <IonItem color={'dark'}>
@@ -84,7 +90,7 @@ const Gestpage: React.FC = () => {
                     <IonInput
                       value={eventId}
                       placeholder="Enter ID..."
-                      onIonChange={(e) => setEventId(e.detail.value!)}
+                      onIonChange={(e: { detail: { value: React.SetStateAction<string>; }; }) => setEventId(e.detail.value!)}
                     />
                   </IonItem>
                   <IonButton expand="block" onClick={fetchRealtyStatus} className="ion-margin-top">
@@ -97,7 +103,7 @@ const Gestpage: React.FC = () => {
         </IonGrid>
 
         {realtyStatus && (
-          <IonItem color={'success'} className="ion-margin-top">
+          <IonItem color={'tertiary'} className="ion-margin-top">
             <IonLabel>Realty Status: {realtyStatus}</IonLabel>
           </IonItem>
         )}

@@ -10,19 +10,19 @@ interface LocationState {
 }
 
 const AddLinen: React.FC = () => {
-  const [apName, setApName] = useState('')
-  const [LaundryName, setLaundryName] = useState('')
-  const [DoubleBedSheets, setDoubleBedSheets] = useState('')
-  const [SingleBedSheets, setSingleBedSheets] = useState('')
-  const [PillowCases, setPillowCases] = useState('')
-  const [BigTowels, setBigTowels] = useState('')
-  const [SmallTowels, setSmallTowels] = useState('')
-  const [Coverlets, setCoverlets] = useState('')
-  const [FittedSheets, setFittedSheets] = useState('')
-  const [QuiltedPillowCases, setQuiltedPillowCases] = useState('')
-  const [HandTowels, setHandTowels] = useState('')
-  const [Robe, setRobe] = useState('')
-  const [PoolTowels, setPoolTowels] = useState('')
+  const [apName, setApName] = useState<any>('')
+  const [LaundryName, setLaundryName] = useState<any>('')
+  const [DoubleBedSheets, setDoubleBedSheets] = useState<any>('')
+  const [SingleBedSheets, setSingleBedSheets] = useState<any>('')
+  const [PillowCases, setPillowCases] = useState<any>('')
+  const [BigTowels, setBigTowels] = useState<any>('')
+  const [SmallTowels, setSmallTowels] = useState<any>('')
+  const [Coverlets, setCoverlets] = useState<any>('')
+  const [FittedSheets, setFittedSheets] = useState<any>('')
+  const [QuiltedPillowCases, setQuiltedPillowCases] = useState<any>('')
+  const [HandTowels, setHandTowels] = useState<any>('')
+  const [Robe, setRobe] = useState<any>('')
+  const [PoolTowels, setPoolTowels] = useState<any>('')
 
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -131,55 +131,55 @@ const AddLinen: React.FC = () => {
                 )}
                 <IonItem color="dark">
                   <IonLabel position="stacked">Apartment Name</IonLabel>
-                  <IonInput value={apName} onIonChange={(e) => setApName(e.detail.value!)} />
+                  <IonInput value={apName} onIonChange={(e: { detail: { value: any } }) => setApName(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Laundry Name</IonLabel>
-                  <IonInput value={LaundryName} onIonChange={(e) => setLaundryName(e.detail.value!)} />
+                  <IonInput value={LaundryName} onIonChange={(e: { detail: { value: any } }) => setLaundryName(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Double Bed Sheets</IonLabel>
-                  <IonInput value={DoubleBedSheets} onIonChange={(e) => setDoubleBedSheets(e.detail.value!)} />
+                  <IonInput value={DoubleBedSheets} onIonChange={(e: { detail: { value: any } }) => setDoubleBedSheets(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Single Bed Sheets</IonLabel>
-                  <IonInput value={SingleBedSheets} onIonChange={(e) => setSingleBedSheets(e.detail.value!)} />
+                  <IonInput value={SingleBedSheets} onIonChange={(e: { detail: { value: any } }) => setSingleBedSheets(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Pillow Cases</IonLabel>
-                  <IonInput value={PillowCases} onIonChange={(e) => setPillowCases(e.detail.value!)} />
+                  <IonInput value={PillowCases} onIonChange={(e: { detail: { value: any } }) => setPillowCases(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Big Towels</IonLabel>
-                  <IonInput value={BigTowels} onIonChange={(e) => setBigTowels(e.detail.value!)} />
+                  <IonInput value={BigTowels} onIonChange={(e: { detail: { value: any } }) => setBigTowels(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Small Towels</IonLabel>
-                  <IonInput value={SmallTowels} onIonChange={(e) => setSmallTowels(e.detail.value!)} />
+                  <IonInput value={SmallTowels} onIonChange={(e: { detail: { value: any } }) => setSmallTowels(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Coverlets</IonLabel>
-                  <IonInput value={Coverlets} onIonChange={(e) => setCoverlets(e.detail.value!)} />
+                  <IonInput value={Coverlets} onIonChange={(e: { detail: { value: any } }) => setCoverlets(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Fitted Sheets</IonLabel>
-                  <IonInput value={FittedSheets} onIonChange={(e) => setFittedSheets(e.detail.value!)} />
+                  <IonInput value={FittedSheets} onIonChange={(e: { detail: { value: any } }) => setFittedSheets(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Quilted Pillow Cases</IonLabel>
-                  <IonInput value={QuiltedPillowCases} onIonChange={(e) => setQuiltedPillowCases(e.detail.value!)} />
+                  <IonInput value={QuiltedPillowCases} onIonChange={(e: { detail: { value: any } }) => setQuiltedPillowCases(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Hand Towels</IonLabel>
-                  <IonInput value={HandTowels} onIonChange={(e) => setHandTowels(e.detail.value!)} />
+                  <IonInput value={HandTowels} onIonChange={(e: { detail: { value: any } }) => setHandTowels(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Robe</IonLabel>
-                  <IonInput value={Robe} onIonChange={(e) => setRobe(e.detail.value!)} />
+                  <IonInput value={Robe} onIonChange={(e: { detail: { value: any } }) => setRobe(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
                   <IonLabel position="stacked">Pool Towels</IonLabel>
-                  <IonInput value={PoolTowels} onIonChange={(e) => setPoolTowels(e.detail.value!)} />
+                  <IonInput value={PoolTowels} onIonChange={(e: { detail: { value: any } }) => setPoolTowels(e.detail.value!)} />
                 </IonItem>
               </IonCardContent>
             </IonCard>
