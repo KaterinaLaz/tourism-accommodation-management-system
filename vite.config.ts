@@ -9,11 +9,7 @@ export default defineConfig({
     legacy()
   ],
   build: {
-    sourcemap: true
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/setupTests.ts',
+    sourcemap: true,
+    outDir: 'dist', 
   }
 })
