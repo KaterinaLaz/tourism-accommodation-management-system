@@ -86,7 +86,7 @@ const Gestpage: React.FC = () => {
               <IonCard color="light">
                 <IonCardContent>
                   <IonItem color={'dark'}>
-                    <IonLabel position="stacked">Enter Event ID</IonLabel>
+                    <IonLabel position="stacked">Enter Booking ID</IonLabel>
                     <IonInput
                       value={eventId}
                       placeholder="Enter ID..."

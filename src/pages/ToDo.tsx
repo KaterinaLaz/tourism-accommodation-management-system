@@ -153,7 +153,7 @@ const Todo: React.FC = () => {
             <IonHeader>
                 <IonToolbar color={'secondary'}>
                     <IonMenuButton slot="start" />
-                    <IonTitle>Todo</IonTitle>
+                    <IonTitle>To Do</IonTitle>
                     <IonButtons slot="end">
                         <IonButton onClick={handleExport}>
                             <IonIcon slot="icon-only" icon={cloudDownloadOutline} ></IonIcon>

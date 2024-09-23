@@ -383,7 +383,7 @@ const VillasAp: React.FC = () => {
                                     />
                             </IonItem>
                             <IonItem color={"dark"}>
-                                <IonLabel position="stacked">Tourist Office Name</IonLabel>
+                                <IonLabel position="stacked">Office Name</IonLabel>
                                     <IonInput
                                         value={editForm.OfficeName || ''}
                                         onIonChange={handleInputChange}
@@ -491,6 +491,14 @@ const VillasAp: React.FC = () => {
                                         value={editLinenForm.SmallTowels || ''}
                                         onIonChange={handleLinenInputChange}
                                         name="SmallTowels"
+                                    />
+                            </IonItem>
+                            <IonItem color={"dark"}>
+                                <IonLabel position="stacked">Pool Towels</IonLabel>
+                                    <IonInput
+                                        value={editLinenForm.PoolTowels || ''}
+                                        onIonChange={handleLinenInputChange}
+                                        name="PoolTowels"
                                     />
                             </IonItem>
                             <IonItem color={"dark"}>

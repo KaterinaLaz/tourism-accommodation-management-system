@@ -129,24 +129,24 @@ const AddHome: React.FC = () => {
                   </IonText>
                 )}
                 <IonInput onIonChange={(e: any) => setApName(e.target.value!)} label='Name' labelPlacement="floating" placeholder="Enter Apartment Name" />
-                <IonInput onIonChange={(e: any) => setBarbecue(e.target.value!)} label='Barbecue' labelPlacement="floating" placeholder="Yes or No" />
-                <IonInput onIonChange={(e: any) => setBathroom(e.target.value!)} label='Bathroom' labelPlacement="floating" placeholder="Enter Number of Bathrooms" />
-                <IonInput onIonChange={(e: any) => setBroomOut(e.target.value!)} label='Did we broom outside?' labelPlacement="floating" placeholder="Yes or No" />
-                <IonInput onIonChange={(e: any) => setCheckIn(e.target.value!)} label='Check in day' labelPlacement="floating" placeholder="Enter the Check in day" />
-                <IonInput onIonChange={(e: any) => setDoubleBed(e.target.value!)} label='Double Beds' labelPlacement="floating" placeholder="Enter Number of Double Beds" />
-                <IonInput onIonChange={(e: any) => setFurnitureOut(e.target.value!)} label='Did we clean the furniture outside?' labelPlacement="floating" placeholder="Yes or No" />
-                <IonInput onIonChange={(e: any) => setInDoor(e.target.value!)} label='In Door Space' labelPlacement="floating" placeholder="Enter s.m." />
-                <IonInput onIonChange={(e: any) => setKitchen(e.target.value!)} label='Kitchen' labelPlacement="floating" placeholder="Enter Number of Kitchens" />
-                <IonInput onIonChange={(e: any) => setLevels(e.target.value!)} label='Levels' labelPlacement="floating" placeholder="Enter Number of Floors" />
                 <IonInput onIonChange={(e: any) => setLocation(e.target.value!)} label='Location' labelPlacement="floating" placeholder="Enter Location" />
-                <IonInput onIonChange={(e: any) => setOffice(e.target.value!)} label='Are reservations made through a tourist office?' labelPlacement="floating" placeholder="Yes or No" />
-                <IonInput onIonChange={(e: any) => setOfficeName(e.target.value!)} label='Enter the office tourist name or the site name' labelPlacement="floating" placeholder="Enter Name" />
+                <IonInput onIonChange={(e: any) => setInDoor(e.target.value!)} label='In Door Space' labelPlacement="floating" placeholder="Enter s.m." />
                 <IonInput onIonChange={(e: any) => setOutDoor(e.target.value!)} label='Out Door Space' labelPlacement="floating" placeholder="Enter s.m." />
+                <IonInput onIonChange={(e: any) => setLevels(e.target.value!)} label='Levels' labelPlacement="floating" placeholder="Enter Number of Floors" />
                 <IonInput onIonChange={(e: any) => setRooms(e.target.value!)} label='Bedrooms' labelPlacement="floating" placeholder="Enter Number of Bedrooms" />
+                <IonInput onIonChange={(e: any) => setBathroom(e.target.value!)} label='Bathroom' labelPlacement="floating" placeholder="Enter Number of Bathrooms" />
+                <IonInput onIonChange={(e: any) => setKitchen(e.target.value!)} label='Kitchen' labelPlacement="floating" placeholder="Enter Number of Kitchens" />
+                <IonInput onIonChange={(e: any) => setBarbecue(e.target.value!)} label='Barbecue' labelPlacement="floating" placeholder="Yes or No" />
                 <IonInput onIonChange={(e: any) => setSauna(e.target.value!)} label='Sauna' labelPlacement="floating" placeholder="Yes or No" />
-                <IonInput onIonChange={(e: any) => setSingleBed(e.target.value!)} label='Single Beds' labelPlacement="floating" placeholder="Enter Number of Single Beds" />
                 <IonInput onIonChange={(e: any) => setwc(e.target.value!)} label='WC' labelPlacement="floating" placeholder="Enter Number of WC" />
+                <IonInput onIonChange={(e: any) => setSingleBed(e.target.value!)} label='Single Beds' labelPlacement="floating" placeholder="Enter Number of Single Beds" />
+                <IonInput onIonChange={(e: any) => setDoubleBed(e.target.value!)} label='Double Beds' labelPlacement="floating" placeholder="Enter Number of Double Beds" />
+                <IonInput onIonChange={(e: any) => setCheckIn(e.target.value!)} label='Check in day' labelPlacement="floating" placeholder="Enter the Check in day" />
+                <IonInput onIonChange={(e: any) => setOffice(e.target.value!)} label='Are reservations made through a tourist office?' labelPlacement="floating" placeholder="Yes or No" />
+                <IonInput onIonChange={(e: any) => setOfficeName(e.target.value!)} label='Enter the tourist office name or the site name' labelPlacement="floating" placeholder="Enter Name or No" />
                 <IonInput onIonChange={(e: any) => setPlanting(e.target.value!)} label='Did we Planting?' labelPlacement="floating" placeholder="Yes or No" />
+                <IonInput onIonChange={(e: any) => setFurnitureOut(e.target.value!)} label='Did we clean the furniture outside?' labelPlacement="floating" placeholder="Yes or No" />
+                <IonInput onIonChange={(e: any) => setBroomOut(e.target.value!)} label='Did we broom outside?' labelPlacement="floating" placeholder="Yes or No" />
               </IonCardContent>
             </IonCard>
           </IonCol>

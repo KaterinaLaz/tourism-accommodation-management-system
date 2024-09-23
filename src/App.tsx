@@ -39,7 +39,6 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
 
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {

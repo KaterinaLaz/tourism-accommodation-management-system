@@ -98,7 +98,7 @@ const Register: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar color={'secondary'}>
-                    <IonTitle>Create Account</IonTitle>
+                    <IonTitle>Create Your Account</IonTitle>
                     <IonMenuButton slot='start' />
                 </IonToolbar>
             </IonHeader>

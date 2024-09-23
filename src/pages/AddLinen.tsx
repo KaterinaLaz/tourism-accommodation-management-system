@@ -130,7 +130,7 @@ const AddLinen: React.FC = () => {
                   </IonText>
                 )}
                 <IonItem color="dark">
-                  <IonLabel position="stacked">Apartment Name</IonLabel>
+                  <IonLabel position="stacked">Name of the house</IonLabel>
                   <IonInput value={apName} onIonChange={(e: { detail: { value: any } }) => setApName(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
@@ -158,6 +158,10 @@ const AddLinen: React.FC = () => {
                   <IonInput value={SmallTowels} onIonChange={(e: { detail: { value: any } }) => setSmallTowels(e.detail.value!)} />
                 </IonItem>
                 <IonItem color="dark">
+                  <IonLabel position="stacked">Pool Towels</IonLabel>
+                  <IonInput value={PoolTowels} onIonChange={(e: { detail: { value: any } }) => setPoolTowels(e.detail.value!)} />
+                </IonItem>
+                <IonItem color="dark">
                   <IonLabel position="stacked">Coverlets</IonLabel>
                   <IonInput value={Coverlets} onIonChange={(e: { detail: { value: any } }) => setCoverlets(e.detail.value!)} />
                 </IonItem>
@@ -177,10 +181,7 @@ const AddLinen: React.FC = () => {
                   <IonLabel position="stacked">Robe</IonLabel>
                   <IonInput value={Robe} onIonChange={(e: { detail: { value: any } }) => setRobe(e.detail.value!)} />
                 </IonItem>
-                <IonItem color="dark">
-                  <IonLabel position="stacked">Pool Towels</IonLabel>
-                  <IonInput value={PoolTowels} onIonChange={(e: { detail: { value: any } }) => setPoolTowels(e.detail.value!)} />
-                </IonItem>
+                
               </IonCardContent>
             </IonCard>
           </IonCol>

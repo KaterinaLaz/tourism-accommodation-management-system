@@ -81,7 +81,7 @@ const ApproveUsers: React.FC = () => {
             <IonBackButton defaultHref="/app/list-of-users" />
             
           </IonButtons>
-          <IonTitle>New user</IonTitle>
+          <IonTitle>New User</IonTitle>
         </IonToolbar>
       </IonHeader>
 
