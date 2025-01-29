@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonInput, IonButton, IonContent, IonItem, IonLabel, IonToast, IonGrid, IonRow, IonCol, IonCard, IonCardContent, IonButtons, IonIcon, IonImg } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
 import { arrowBackOutline } from 'ionicons/icons'; // Back arrow icon
+import logo from './logo-1.png';
+
 
 const Gestpage: React.FC = () => {
   const [eventId, setEventId] = useState<string>(''); // To store the user's input for the event ID
